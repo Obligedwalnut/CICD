@@ -30,9 +30,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'			
     - run: npm ci			
-    - name: zip file	
-				
-      run: zip -r CI.zip ./app.js ./config ./migrations ./models ./routes ./scripts ./appspec.yml ./package.json ./package-lock.json
 
 			# AWS 인증하기
     - name: AWS configure credentials
@@ -41,6 +38,9 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}				
         aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
 				aws-region: ap-northeast-2
+
+    - name: zip file					
+      run: zip -r CI.zip ./app.js ./config ./migrations ./models ./routes ./scripts ./appspec.yml ./package.json ./package-lock.json
 
 			# S3로 업로드하기
     - name: upload to S3			
