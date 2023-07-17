@@ -5,12 +5,9 @@
 name: Node.js CI
 
 # Event 설정
-on:
-	# push를 할 경우
-  push:
-		#branches 가 main 인 경우 workflow 동작
-    branches: [ "main" ]
-	# pull_request를 받을 경우도 마찬가지로 설정해주었다.
+on:	
+  push:		
+    branches: [ "main" ]	
   pull_request:
     branches: [ "main" ]
 
@@ -28,7 +25,7 @@ jobs:
 			# matrix를 사용하여 다양한 작업 구성 행렬을 정의한다.
       matrix:
 				# 배열을 사용해, 노드 버전 구성 행렬을 정의한다.
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
 		# 단계 정의
