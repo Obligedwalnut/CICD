@@ -30,7 +30,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'			
     - run: npm ci			
-    - name: zip file			
+    - name: zip file	
+				
       run: zip -r CI.zip ./app.js ./config ./migrations ./models ./routes ./scripts ./appspec.yml ./package.json ./package-lock.json
 
 			# AWS 인증하기
