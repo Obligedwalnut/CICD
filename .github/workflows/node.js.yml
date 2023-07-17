@@ -37,4 +37,4 @@ jobs:
       run: aws s3 cp --region ap-northeast-2 ./CI.zip s3://obligedwalnut-cicd-bucket/deploy/
 
     - name: deploy with AWS codeDeploy
-      run: aws deploy create-deployment --application-name deployment --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name my-deployment --s3-location bucket=obligedwalnut-cicd-bucket,bundleType=zip,key=deploy/CI.zip
+      run: aws deploy create-deployment --application-name my-codedeploy-app --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name my-codedeploy-deployment-group --s3-location bucket=obligedwalnut-cicd-bucket,bundleType=zip,key=deploy/CI.zip
