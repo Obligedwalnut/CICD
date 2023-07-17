@@ -1,55 +1,40 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-# workflow의 제목
 name: Node.js CI
 
-# Event 설정
-on:	
-  push:		
-    branches: [ "main" ]	
+on:
+  push:
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-
-jobs:	
+jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:		
-      matrix:			
+    strategy:
+      matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-		# 단계 정의
-    steps:			
-    - uses: actions/checkout@v3			
-    - name: Use Node.js ${{ matrix.node-version }}			
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'			
-    - run: npm ci			
+        cache: 'npm'
+    - run: npm ci
 
-			# AWS 인증하기
     - name: AWS configure credentials
       uses: aws-actions/configure-aws-credentials@v1
-      with:				
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}				
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_PRIVATE_ACCESS_KEY }}
-				aws-region: ap-northeast-2
+        aws-region: ap-northeast-2
 
-    - name: zip file					
+    - name: zip file
       run: zip -r CI.zip ./app.js ./config ./migrations ./models ./routes ./scripts ./appspec.yml ./package.json ./package-lock.json
 
-			# S3로 업로드하기
-    - name: upload to S3			
+    - name: upload to S3
       run: aws s3 cp --region ap-northeast-2 ./CI.zip s3://obligedwalnut-cicd-bucket/deploy/
 
-			# codeDeploy 실행
     - name: deploy with AWS codeDeploy
-      run: aws deploy create-deployment					
-        --application-name deployment					
-        --deployment-config-name CodeDeployDefault.OneAtATime					
-        --deployment-group-name my-deployment					
-        --s3-location bucket=obligedwalnut-cicd-bucket,bundleType=zip,key=deploy/CI.zip
+      run: aws deploy create-deployment --application-name deployment --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name my-deployment --s3-location bucket=obligedwalnut-cicd-bucket,bundleType=zip,key=deploy/CI.zip
