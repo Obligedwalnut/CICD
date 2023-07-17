@@ -13,18 +13,12 @@ on:
 
 # workflow가 동작할 행위를 설정해준다.
 # jobs를 설정해주는 것
-jobs:
-	# job1, 즉 이름이 build이다.
+jobs:	
   build:
-		# runs-on : 해당 job을 어떤 OS에서 실행할 것인지 설정해준다.
-		# ubuntu 버전은 Github action 설명서를 보고 참고하자.
-    runs-on: ubuntu-latest
+		  runs-on: ubuntu-latest
 
-		# 다양한 작업 구성 행렬 전략을 사용한다.
-    strategy:
-			# matrix를 사용하여 다양한 작업 구성 행렬을 정의한다.
-      matrix:
-				# 배열을 사용해, 노드 버전 구성 행렬을 정의한다.
+    strategy:		
+      matrix:			
         node-version: [18.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
